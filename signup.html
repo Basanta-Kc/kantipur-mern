@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form method="post" action="/index.html">
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" placeholder="Username" />
+      <br />
+      <label for="password">Password</label>
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="password"
+      />
+      <label for="gender">Gender:</label>
+
+      <input type="radio" id="male" name="gender" value="male" required />
+      <label for="male">Male</label>
+
+      <input type="radio" id="female" name="gender" value="female" required />
+      <label for="female">Female</label>
+
+      <input type="radio" id="other" name="gender" value="other" required />
+      <label for="other">Other</label>
+      <br />
+      <label for="country">Country</label>
+      <select name="country" id="country">
+        <option value="">Select Country</option>
+        <option value="np">Nepal</option>
+        <option value="usa">Usa</option>
+        <option value="in">India</option>
+      </select>
+      <br />
+
+      <label for="terms">I agree to terms and services.</label>
+      <input type="checkbox" name="terms" id="terms" />
+
+      <label for="about_you">About You:</label>
+      <textarea name="about_you" id="about_you"></textarea>
+
+      <input type="submit" value="Sign Up" />
+    </form>
+  </body>
+</html>
+
+<!-- // firstname(text), lastname, email, dob, 
+//  gender( use radio),
+// country 
+// i aggree to tem and services (checkbox) -->
