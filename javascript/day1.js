@@ -72,3 +72,10 @@ console.log(count);
 // falsy => Nan, undefined, null, "", 0
 // truthy => all other values
 console.log("a" > "A");
+
+// variables declared by using var keyword
+// are bind to this object (global)
+var name = "basanta";
+let age = 10;
+const school = "nbhs";
+console.log(this.school);
