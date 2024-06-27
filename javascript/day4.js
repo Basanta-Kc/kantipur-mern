@@ -32,11 +32,19 @@ const person = {
       console.log(this); // Person
     };
     anotherArrow();
-    console.log(this); 
+    console.log(this);
   },
 };
 person.greet();
 person.greetArrow();
+
+for (const key in person) {
+  console.log(key, person[key]);
+}
+
+// const student = {}
+// const key = prompt("enter student key") // exit
+// const value = prompt("enter student value")
 
 // console.log(person.fruits.waterMelon);
 // console.log(person.fruits.banana);
