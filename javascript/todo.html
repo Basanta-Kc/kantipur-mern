@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+  </head>
+  <body>
+    <form>
+      <input type="text" name="task" id="task" placeholder="Your new task." />
+      <input type="submit" value="Add" id="submit" />
+    </form>
+    <ul>
+      <li>learn php <button>delete</button> <button>edit</button></li>
+      <!-- <li>learn php <button>delete</button></li>
+      // ${newTask}
+      <button>delete</button> -->
+    </ul>
+    <li>learn php <button>delete</button> <button>edit</button></li>
+  </body>
+  <script>
+    const tasks = ["learn html", "learn css", "learn php"];
+    let taskToBeEditeList = null;
+    // create, read, update, delete
+    const deleteTask = (indexToBeDeleted) => {
+      tasks.splice(indexToBeDeleted, 1);
+    };
+
+    const updateTask = () => {
+      const updateTaskValue = document.getElementById("task").value;
+      taskToBeEditeList.innerHTML = `${updateTaskValue} <button>delete</button> <button>edit</button>`; // <li> learn java </li>
+      document.querySelector("form").reset();
+      document.getElementById("submit").value = "Add";
+      taskToBeEditeList = null;
+    };
+
+    const addTask = () => {
+      const newTask = document.getElementById("task").value;
+      const list = document.createElement("li"); // <li> <li>
+      list.innerHTML = `${newTask} <button>delete</button> <button>edit</button>`; // <li> learn java </li>
+      document.querySelector("ul").append(list);
+      //document.getElementById("task").value = "";
+      document.querySelector("form").reset();
+    };
+
+    const readTask = () => {
+      let taskList = "";
+      tasks.forEach((task) => {
+        taskList += `<li> ${task} <button>delete</button> <button>edit</button></li>`;
+      });
+      document.querySelector("ul").innerHTML = taskList;
+    };
+
+    readTask();
+
+    // Events Listners
+    document.querySelector("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (taskToBeEditeList) updateTask();
+      else addTask();
+    });
+
+    // HINTS
+
+    // add event listern on parent element ul,
+    // since li  & button are dynamcially generated we cannot attach event to them
+    // make sure the clicked button is delete not list (li)
+    // to remove the specific node use .remove() function
+    document.querySelector("ul").addEventListener("click", (e) => {
+      const { tagName, textContent, parentElement } = e.target;
+      if (tagName === "BUTTON" && textContent === "delete") {
+        parentElement.remove();
+      }
+
+      if (tagName === "BUTTON" && textContent === "edit") {
+        console.log(parentElement.textContent);
+        const taskToBeUpdated = parentElement.textContent
+          .replace("edit", "")
+          .replace("delete", "");
+
+        document.getElementById("task").value = taskToBeUpdated;
+        document.getElementById("submit").value = "Update";
+        taskToBeEditeList = parentElement; // li reference
+      }
+    });
+
+    const person = {
+      name: "basanta",
+      age: 10,
+    };
+
+    const { name, age } = person;
+  </script>
+</html>
