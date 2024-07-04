@@ -11,36 +11,40 @@
       <input type="submit" value="Add" id="submit" />
     </form>
     <ul>
-      <li>learn php <button>delete</button> <button>edit</button></li>
+      <!-- <li>learn php <button>delete</button> <button>edit</button></li> -->
       <!-- <li>learn php <button>delete</button></li>
       // ${newTask}
       <button>delete</button> -->
     </ul>
-    <li>learn php <button>delete</button> <button>edit</button></li>
   </body>
   <script>
-    const tasks = ["learn html", "learn css", "learn php"];
+    const tasks = JSON.parse(localStorage.getItem("todos")) ?? [];
+
     let taskToBeEditeList = null;
-    // create, read, update, delete
-    const deleteTask = (indexToBeDeleted) => {
-      tasks.splice(indexToBeDeleted, 1);
-    };
+
+    // Dom Elements
+    const taskFormEl = document.querySelector("form");
+    const taskInputEl = document.getElementById("task");
+    const taskContainerEl = document.querySelector("ul");
+    const submitButtonEl = document.getElementById("submit");
 
     const updateTask = () => {
-      const updateTaskValue = document.getElementById("task").value;
+      const updateTaskValue = taskInputEl.value;
       taskToBeEditeList.innerHTML = `${updateTaskValue} <button>delete</button> <button>edit</button>`; // <li> learn java </li>
-      document.querySelector("form").reset();
-      document.getElementById("submit").value = "Add";
+      taskFormEl.reset();
+      submitButtonEl.value = "Add";
       taskToBeEditeList = null;
     };
 
     const addTask = () => {
-      const newTask = document.getElementById("task").value;
+      const newTask = taskInputEl.value;
       const list = document.createElement("li"); // <li> <li>
       list.innerHTML = `${newTask} <button>delete</button> <button>edit</button>`; // <li> learn java </li>
-      document.querySelector("ul").append(list);
+      taskContainerEl.append(list);
       //document.getElementById("task").value = "";
-      document.querySelector("form").reset();
+      taskFormEl.reset();
+      tasks.push(newTask);
+      localStorage.setItem("todos", JSON.stringify(tasks));
     };
 
     const readTask = () => {
@@ -48,38 +52,36 @@
       tasks.forEach((task) => {
         taskList += `<li> ${task} <button>delete</button> <button>edit</button></li>`;
       });
-      document.querySelector("ul").innerHTML = taskList;
+      taskContainerEl.innerHTML = taskList;
     };
 
     readTask();
 
     // Events Listners
-    document.querySelector("form").addEventListener("submit", (e) => {
+    taskFormEl.addEventListener("submit", (e) => {
       e.preventDefault();
       if (taskToBeEditeList) updateTask();
       else addTask();
     });
 
     // HINTS
-
     // add event listern on parent element ul,
     // since li  & button are dynamcially generated we cannot attach event to them
     // make sure the clicked button is delete not list (li)
     // to remove the specific node use .remove() function
-    document.querySelector("ul").addEventListener("click", (e) => {
+    taskContainerEl.addEventListener("click", (e) => {
       const { tagName, textContent, parentElement } = e.target;
       if (tagName === "BUTTON" && textContent === "delete") {
         parentElement.remove();
       }
 
       if (tagName === "BUTTON" && textContent === "edit") {
-        console.log(parentElement.textContent);
         const taskToBeUpdated = parentElement.textContent
           .replace("edit", "")
           .replace("delete", "");
 
-        document.getElementById("task").value = taskToBeUpdated;
-        document.getElementById("submit").value = "Update";
+        taskInputEl.value = taskToBeUpdated;
+        submitButtonEl.value = "Update";
         taskToBeEditeList = parentElement; // li reference
       }
     });
