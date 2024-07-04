@@ -11,3 +11,7 @@ localStorage.setItem('todos', JSON.stringify(todos))
 const todosFromLS = localStorage.getItem('todos')
 console.log(JSON.parse(todosFromLS))
 
+
+    // <h1 data-name="heading">Learn mern</h1>
+
+console.log(document.querySelector('h1').dataset.name)

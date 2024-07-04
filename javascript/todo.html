@@ -49,8 +49,8 @@
 
     const readTask = () => {
       let taskList = "";
-      tasks.forEach((task) => {
-        taskList += `<li> ${task} <button>delete</button> <button>edit</button></li>`;
+      tasks.forEach((task, index) => {
+        taskList += `<li data-index="${index}"> ${task} <button>delete</button> <button>edit</button></li>`;
       });
       taskContainerEl.innerHTML = taskList;
     };
@@ -73,6 +73,9 @@
       const { tagName, textContent, parentElement } = e.target;
       if (tagName === "BUTTON" && textContent === "delete") {
         parentElement.remove();
+        console.log(parentElement.dataset.index)
+        tasks.splice(parentElement.dataset.index, 1);
+        localStorage.setItem("todos", JSON.stringify(tasks));
       }
 
       if (tagName === "BUTTON" && textContent === "edit") {
