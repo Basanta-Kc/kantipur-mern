@@ -10,6 +10,10 @@
       <input type="text" name="task" id="task" placeholder="Your new task." />
       <input type="submit" value="Add" id="submit" />
     </form>
+    <form id="search-form">
+      <input type="text" name="search" id="search" placeholder="Search value" />
+      <input type="submit" value="Search" />
+    </form>
     <ul>
       <!-- <li>learn php <button>delete</button> <button>edit</button></li> -->
       <!-- <li>learn php <button>delete</button></li>
@@ -27,6 +31,7 @@
     const taskInputEl = document.getElementById("task");
     const taskContainerEl = document.querySelector("ul");
     const submitButtonEl = document.getElementById("submit");
+    const searchFormEl = document.getElementById("search-form");
 
     const updateTask = () => {
       const updateTaskValue = taskInputEl.value;
@@ -39,6 +44,7 @@
     const addTask = () => {
       const newTask = taskInputEl.value;
       const list = document.createElement("li"); // <li> <li>
+      list.dataset.index = tasks.length;
       list.innerHTML = `${newTask} <button>delete</button> <button>edit</button>`; // <li> learn java </li>
       taskContainerEl.append(list);
       //document.getElementById("task").value = "";
@@ -47,9 +53,9 @@
       localStorage.setItem("todos", JSON.stringify(tasks));
     };
 
-    const readTask = () => {
+    const readTask = (tasksToRendered = tasks) => {
       let taskList = "";
-      tasks.forEach((task, index) => {
+      tasksToRendered.forEach((task, index) => {
         taskList += `<li data-index="${index}"> ${task} <button>delete</button> <button>edit</button></li>`;
       });
       taskContainerEl.innerHTML = taskList;
@@ -64,6 +70,13 @@
       else addTask();
     });
 
+    searchFormEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const searchValue = document.getElementById("search").value;
+      const filteredTasks = tasks.filter((task) => task.includes(searchValue));
+      readTask(filteredTasks)
+    });
+
     // HINTS
     // add event listern on parent element ul,
     // since li  & button are dynamcially generated we cannot attach event to them
@@ -73,9 +86,9 @@
       const { tagName, textContent, parentElement } = e.target;
       if (tagName === "BUTTON" && textContent === "delete") {
         parentElement.remove();
-        console.log(parentElement.dataset.index)
         tasks.splice(parentElement.dataset.index, 1);
         localStorage.setItem("todos", JSON.stringify(tasks));
+        readTask();
       }
 
       if (tagName === "BUTTON" && textContent === "edit") {
@@ -89,11 +102,20 @@
       }
     });
 
-    const person = {
-      name: "basanta",
-      age: 10,
-    };
+    // Destructing Example
+    // const person = {
+    //   name: "basanta",
+    //   age: 10,
+    // };
+// const c = 10;
+//     function add(a,b = c){
+//       return a + b;
+//     }
 
-    const { name, age } = person;
+//     add(2,3)
+
+//     add(2) => 12
+
+    // const { name, age } = person;
   </script>
 </html>
