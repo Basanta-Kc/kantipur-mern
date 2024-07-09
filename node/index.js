@@ -14,6 +14,7 @@ app.get("/", (req, res) => {
       <form method="post" action="/delete/${index}">
       <button type="submit">delete</button>
       </form>
+      <a href="/edit/${index}">edit</a>
     </li>`;
   });
   res.send(`
@@ -44,13 +45,21 @@ app.post("/delete/:index", (req, res) => {
   res.redirect("/");
 });
 
-app.get('/edit/:index',(req,res) => {
-  // res html form with prefilled value value = todos[index]
-})
+app.get("/edit/:index", (req, res) => {
+  const index = req.params.index;
+  res.send(`
+      <form method="post" action="/edit/${index}">
+      <input type="text" name="task" id="task" value="${todos[index]}" />
+      <input type="submit" value="Update" id="submit" />
+    </form>
+    `);
+});
 
-app.post("/update/:index", (req,res) => {
+app.post("/edit/:index", (req, res) => {
+  todos[req.params.index] = req.body.task;
+  res.redirect("/");
   // update todos array
-})
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
