@@ -44,6 +44,14 @@ app.post("/delete/:index", (req, res) => {
   res.redirect("/");
 });
 
+app.get('/edit/:index',(req,res) => {
+  // res html form with prefilled value value = todos[index]
+})
+
+app.post("/update/:index", (req,res) => {
+  // update todos array
+})
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
