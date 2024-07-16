@@ -21,7 +21,7 @@ app.get("/auth/sign-up", (req, res) => {
 });
 
 app.get("/auth/sign-in", (req, res) => {
-  res.render("sign-in");
+  res.render("sign-in", { message: null });
 });
 
 app.post("/auth/sign-up", async (req, res) => {

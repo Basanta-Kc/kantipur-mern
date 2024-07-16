@@ -7,6 +7,9 @@
   </head>
   <body>
     <h1>Sign In</h1>
+    <% if(message) {%>
+    <p><%= message %></p>
+    <% } %>
     <form action="/auth/sign-in" method="post">
       <input type="email" name="email" id="email" placeholder="email" /><br />
       <input
