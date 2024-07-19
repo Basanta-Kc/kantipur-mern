@@ -1,24 +1,33 @@
 const Task = require("../models/Task");
 
 const getTasks = async (req, res) => {
-  const tasks = await Task.find();
+  if (!req.session.user) return res.redirect("/auth/sign-in");
+  const tasks = await Task.find({ user: req.session.user._id });
   res.render("index", { tasks });
 };
 
 const createTask = async (req, res) => {
-  await Task.create({ title: req.body.title });
+  if (!req.session.user) return res.redirect("/auth/sign-in");
+
+  await Task.create({ title: req.body.title, user: req.session.user._id });
   res.redirect("/");
 };
 
 const deleteTask = async (req, res) => {
+  if (!req.session.user) return res.redirect("/auth/sign-in");
+
   const taskId = req.params.id;
-  await Task.deleteOne({ _id: taskId });
+  await Task.deleteOne({ _id: taskId, user: req.session.user._id });
   res.redirect("/");
 };
 
 const editTask = async (req, res) => {
+  if (!req.session.user) return res.redirect("/auth/sign-in");
+
   const taskId = req.params.id;
-  await Task.findOne({ _id: taskId });
+  const task = await Task.findOne({ _id: taskId, user:req.session.user._id });
+
+  // Todo:
   res.send(`
       <form method="post" action="/edit/${taskId}">
       <input type="text" name="title" id="title" value="${task.title}" />

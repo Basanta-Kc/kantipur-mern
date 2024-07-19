@@ -14,11 +14,11 @@ const signUp = async (req, res) => {
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
   await User.create({ password: hashedPassword, ...rest });
-  res.redirect("/");
+  res.redirect("/sign-in");
 };
 
 const signIn = async (req, res) => {
-  const user = await User.findOne({ email: req.body.email }); // { username, password}
+  const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
     res.render("sign-in", { message: "Invalid Credentials" });
@@ -31,8 +31,19 @@ const signIn = async (req, res) => {
     userHashedPassword
   );
 
-  if (passwordIsCorrect) res.redirect("/");
-  else res.render("sign-in", { message: "Invalid Credentials" });
+  if (passwordIsCorrect) {
+    req.session.user = user;
+    res.redirect("/");
+  } else {
+    res.render("sign-in", { message: "Invalid Credentials" });
+  }
+};
+
+const logOut = async (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.redirect("/auth/sign-in");
+  });
 };
 
 module.exports = {
@@ -40,4 +51,5 @@ module.exports = {
   signUp,
   signInPage,
   signUpPage,
+  logOut,
 };

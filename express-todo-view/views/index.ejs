@@ -4,22 +4,48 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo App</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
-    <form method="post" action="/add">
-      <input type="text" name="title" id="title" placeholder="Your new task." />
-      <input type="submit" value="Add" id="submit" />
-    </form>
-    <ul>
-      <% tasks.forEach((task) => { %>
-      <li>
-        <%= task.title %>
-        <form method="post" action="/delete/<%= task._id %>">
-          <button type="submit">delete</button>
+    <nav class="navbar navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand">Todo App</a>
+        <form class="d-flex" action="/auth/logout" method="post">
+          <button class="btn btn-outline-success" type="submit">Logout</button>
         </form>
-        <a href="/edit/<%= task._id %>">edit</a>
-      </li>
-      <% }) %>
-    </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <form method="post" action="/add">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" name="title" class="form-control" id="title" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <h3 class="my-3">Todo List</h3>
+      <ul class="list-group">
+        <% tasks.forEach((task) => { %>
+        <li class="list-group-item">
+          <%= task.title %>
+          <form method="post" action="/delete/<%= task._id %>">
+            <button type="submit" class="btn btn-danger">delete</button>
+            <a
+              class="btn btn-primary"
+              href="/edit/<%= task._id %>"
+              role="button"
+              >Edit</a
+            >
+          </form>
+        </li>
+        <% }) %>
+      </ul>
+    </div>
   </body>
 </html>
