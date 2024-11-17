@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema(
     image: String,
     description: String,
     price: Number,
-    // user: { type: Schema.Types.ObjectId, ref: "User" },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

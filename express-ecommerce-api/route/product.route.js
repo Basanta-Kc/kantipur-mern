@@ -6,6 +6,7 @@ const {
   deleteProduct,
   updateProduct,
 } = require("../controller/product.controller");
+const { protect } = require("../middleware/auth.middleware");
 const router = express.Router();
 
 const storage = multer.diskStorage({
@@ -20,8 +21,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/", upload.single("image"), createProduct);
+router.post("/", protect, upload.single("image"), createProduct);
 router.get("/", getProducts);
-router.delete("/:id", deleteProduct);
-router.patch("/:id", updateProduct);
+router.delete("/:id", protect, deleteProduct);
+router.patch("/:id", protect, updateProduct);
 module.exports = router;

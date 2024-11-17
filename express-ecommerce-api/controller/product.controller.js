@@ -6,6 +6,7 @@ const createProduct = async (req, res) => {
     image: req.file.filename,
     price: req.body.price,
     description: req.body.description,
+    user: req.authUser.id,
   });
   res.json({
     message: "Product created succesfully.",
