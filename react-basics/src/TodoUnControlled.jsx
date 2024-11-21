@@ -1,58 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import "./App.css";
-// useState(0) // useState(() => { computation  return computeValue})
-const getTodoFromLocalStorage = () => {
-  const todos = localStorage.getItem("todos");
-  return JSON.parse(todos) ?? [];
-};
-
 function App() {
+  const todoInputRef = useRef(null);
   const [indexToBeEdited, setIndexToBeEdited] = useState(null);
   const [newTodo, setNewTodo] = useState("");
-  const [todos, setTodos] = useState(getTodoFromLocalStorage);
-
-  // useEffect(() => {
-  //   console.log("first");
-  // });
-
-  // useEffect(() => {
-  //   console.log("second");
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("third, newTodo");
-  // }, [newTodo]);
-
-  // useEffect(() => {
-  //   console.log("fourth, todos");
-  // }, [todos]);
-
-  // useEffect(() => {
-  //   console.log("fifith, indextobeedit");
-  // }, [indexToBeEdited]);
-
-  // useEffect(() => {
-  //   console.log("sixth, all");
-  // }, [indexToBeEdited, todos, newTodo]);
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+  // const todos = ["learn html", "learn css"];
+  const [todos, setTodos] = useState(["learn html", "learn css"]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (indexToBeEdited == null) {
-      todos.push(newTodo);
+      todos.push(todoInputRef.current.value);
     } else {
       todos[indexToBeEdited] = newTodo;
       setIndexToBeEdited(null);
     }
+
+    todoInputRef.current.value = "";
     setTodos([...todos]);
     setNewTodo("");
+
+    // setcount(count + 1)
   };
 
   const handleChange = (e) => {
-    setNewTodo(e.target.value);
+    setNewTodo(e.target.value + "reakes");
   };
 
   const handleDelete = (indexToBeDeleted) => {
@@ -65,7 +37,7 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input value={newTodo} type="text" onChange={handleChange} />
+        <input ref={todoInputRef} type="text" />
         <button type="submit">
           {indexToBeEdited == null ? "Add" : "Update"}
         </button>
@@ -77,7 +49,7 @@ function App() {
             <li key={index}>
               {todo} <button onClick={() => handleDelete(index)}>delete</button>{" "}
               <button
-                onClick={() => {
+                onClick={(e) => {
                   setIndexToBeEdited(index);
                   setNewTodo(todos[index]);
                 }}
