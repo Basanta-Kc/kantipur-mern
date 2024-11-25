@@ -27,6 +27,7 @@ function useQueryPokemon() {
 }
 
 function Pokemons() {
+  // const user = useContext(UserContext)
   const {
     state,
     error,

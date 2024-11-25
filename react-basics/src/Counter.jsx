@@ -1,5 +1,14 @@
-import { useReducer } from "react";
+import { useReducer, useState, useMemo } from "react";
 import "./App.css";
+
+const calculateFactorial = (n) => {
+  console.log("callledddd");
+  if (n <= 1) return 1;
+  return n * calculateFactorial(n - 1);
+};
+
+// calulateFactorial(5) => 120
+
 function reducer(state, action) {
   switch (action.type) {
     case "increment":
@@ -13,6 +22,7 @@ function reducer(state, action) {
 
 function Counter() {
   const [state, dispatch] = useReducer(reducer, { count: 0 });
+  const [value, setValue] = useState("");
   const handleIncrement = () => {
     dispatch({ type: "increment" });
   };
@@ -20,8 +30,19 @@ function Counter() {
     dispatch({ type: "decrement" });
   };
 
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  const factorial = useMemo(
+    () => calculateFactorial(state.count),
+    [state.count]
+  );
+  // const factorial = calculateFactorial(state.count);
+
   return (
     <div>
+      <input type="text" value={value} onChange={handleChange} />
       <p>
         {state.count > 10 ? "count cannot be greater than 10" : ""}
         <button disabled={state.count > 9} onClick={handleIncrement}>
@@ -33,6 +54,9 @@ function Counter() {
         <button disabled={state.count < -9} onClick={handleDecrement}>
           -
         </button>
+      </p>
+      <p>
+        Factorial of {state.count} is {factorial}
       </p>
     </div>
   );

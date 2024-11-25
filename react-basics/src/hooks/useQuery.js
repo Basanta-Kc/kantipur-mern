@@ -10,11 +10,10 @@ function reducer(state, action) {
   return state;
 }
 
-const getValueFromLocalStorage = (state) => {
 
-  return {}
+const getInitalValue = (state) => {
+ return {}
 }
-
 
 export function useQuery(url) {
   //   const [state, setState] = useState("loading");
@@ -25,7 +24,7 @@ export function useQuery(url) {
     state: "loading",
     error: null,
     data: null,
-  },);
+  }, getInitalValue);
 
   useEffect(() => {
     // data is fetching

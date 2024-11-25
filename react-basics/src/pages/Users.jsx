@@ -1,35 +1,53 @@
-import { useEffect, useState } from "react";
 import { useQuery } from "../hooks/useQuery";
+import { useUser } from "../App";
 
-function useQueryUsers() {
-  const [state, setState] = useState("loading");
-  const [error, setError] = useState();
-  const [users, setUsers] = useState();
+// function useQueryUsers() {
+//   const [state, setState] = useState("loading");
+//   const [error, setError] = useState();
+//   const [users, setUsers] = useState();
 
-  useEffect(() => {
-    // data is fetching
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((res) => res.json())
-      .then((data) => {
-        // data is fetched
-        // throw new Error("time limit exceeded");
-        setState("success");
-        console.log(data);
-        setUsers(data);
-      })
-      .catch((err) => {
-        setState("error");
-        setError(err.message);
-      });
-  }, []);
+//   useEffect(() => {
+//     // data is fetching
+//     fetch("https://jsonplaceholder.typicode.com/users")
+//       .then((res) => res.json())
+//       .then((data) => {
+//         // data is fetched
+//         // throw new Error("time limit exceeded");
+//         setState("success");
+//         console.log(data);
+//         setUsers(data);
+//       })
+//       .catch((err) => {
+//         setState("error");
+//         setError(err.message);
+//       });
+//   }, []);
 
-  return { state, error, users };
+//   return { state, error, users };
+// }
+
+function ActionButtons() {
+  const user = useUser();
+  return (
+    <>
+      {user.role.includes("admin") && (
+        <>
+          <button>edit</button>
+          <button>delete</button>{" "}
+        </>
+      )}
+
+      {user && <button>view</button>}
+    </>
+  );
 }
 
 function Users() {
-  const { state, error, data: users } = useQuery(
-    "https://jsonplaceholder.typicode.com/users"
-  );
+  const {
+    state,
+    error,
+    data: users,
+  } = useQuery("https://jsonplaceholder.typicode.com/users");
   return (
     <>
       <h2>Users</h2>
@@ -37,7 +55,9 @@ function Users() {
       {state === "success" && (
         <ul>
           {users.map(({ name }) => (
-            <li key={name}>{name}</li>
+            <li key={name}>
+              {name} <ActionButtons />
+            </li>
           ))}
         </ul>
       )}
