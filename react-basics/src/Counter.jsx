@@ -1,8 +1,15 @@
-import { useReducer, useState, useMemo } from "react";
+import {
+  useReducer,
+  useState,
+  useEffect,
+  useMemo,
+  memo,
+  useCallback,
+} from "react";
 import "./App.css";
+import PropTypes from "prop-types";
 
 const calculateFactorial = (n) => {
-  console.log("callledddd");
   if (n <= 1) return 1;
   return n * calculateFactorial(n - 1);
 };
@@ -20,6 +27,29 @@ function reducer(state, action) {
   // if (action.type === "decrement") return { count: state.count - 1 };
 }
 
+function Header({ value }) {
+  useEffect(() => {
+    return () => {
+      console.log("cleanup function called");
+    };
+  }, []);
+  return <h1>{value}</h1>;
+}
+
+Header.propTypes = {
+  value: PropTypes.string,
+};
+
+function Input({ value, handleChange }) {
+  console.log("Input component called (render)");
+  return <input type="text" value={value} onChange={handleChange} />;
+}
+
+const MemoizedInput = memo(Input);
+
+// React.memo()
+const MemoizedHeader = memo(Header);
+
 function Counter() {
   const [state, dispatch] = useReducer(reducer, { count: 0 });
   const [value, setValue] = useState("");
@@ -30,19 +60,28 @@ function Counter() {
     dispatch({ type: "decrement" });
   };
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    console.log("useEffect");
+    return () => {
+      console.log("cleanup");
+    };
+  }, [state.count]);
+
+  const handleChange = useCallback((e) => {
     setValue(e.target.value);
-  };
+  }, []);
 
   const factorial = useMemo(
     () => calculateFactorial(state.count),
     [state.count]
   );
+
   // const factorial = calculateFactorial(state.count);
 
   return (
     <div>
-      <input type="text" value={value} onChange={handleChange} />
+      {state.count < 2 && <MemoizedHeader value={value} />}
+      <MemoizedInput value={value} handleChange={handleChange} />
       <p>
         {state.count > 10 ? "count cannot be greater than 10" : ""}
         <button disabled={state.count > 9} onClick={handleIncrement}>
