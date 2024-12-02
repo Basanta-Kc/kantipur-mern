@@ -5,7 +5,9 @@ const productSchema = new mongoose.Schema(
     image: String,
     description: String,
     price: Number,
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    // discount
+    featured: Boolean,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
