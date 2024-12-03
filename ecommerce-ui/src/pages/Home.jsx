@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid2";
 import NavBar from "../components/NavBar";
 import ProductCard from "../components/ProductCard";
 import { Typography } from "@mui/material";
-import Skeleton from "@mui/material/Skeleton";
+import { ProductsSkeleton } from "../components/ProductsSkeleton";
 
 const getLatestProduct = async () => {
   const res = await axios.get("http://localhost:3000/api/product/latest");
@@ -43,22 +43,11 @@ export default function Home() {
       <Grid container spacing={2}>
         {isLoading ? (
           <>
-            <Grid size={{ md: 3 }}>
-              <Skeleton variant="rectangular" width={200} height={200} />
-            </Grid>
-            <Grid size={{ md: 3 }}>
-              <Skeleton variant="rectangular" width={200} height={200} />
-            </Grid>
-            <Grid size={{ md: 3 }}>
-              <Skeleton variant="rectangular" width={200} height={200} />
-            </Grid>
-            <Grid size={{ md: 3 }}>
-              <Skeleton variant="rectangular" width={200} height={200} />
-            </Grid>
+            <ProductsSkeleton />
           </>
         ) : (
-          latestProducts?.map((product) => (
-            <Grid key={product._id} size={{ md: 3 }}>
+          latestProducts.map((product) => (
+            <Grid key={product._id} size={{ md: 3, sm: 6 }}>
               <ProductCard product={product} />
             </Grid>
           ))

@@ -4,6 +4,15 @@ const User = require("../model/User");
 
 const signUp = async (req, res) => {
   const { password, ...rest } = req.body;
+
+  const userExist = await User.findOne({ email: req.body.email });
+
+  if (userExist) {
+    res.status(400).json({
+      message: "User already exist.",
+    });
+  }
+
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(password, salt);
   await User.create({ password: hashedPassword, ...rest });
