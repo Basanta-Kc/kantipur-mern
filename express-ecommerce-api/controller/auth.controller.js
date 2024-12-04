@@ -47,6 +47,7 @@ const signIn = async (req, res) => {
     res.json({
       message: "Signedin succesfully.",
       token,
+      data: user
     });
   } else {
     res.status(401).json({
@@ -55,12 +56,6 @@ const signIn = async (req, res) => {
   }
 };
 
-const logOut = async (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie("connect.sid");
-    res.redirect("/auth/sign-in");
-  });
-};
 
 module.exports = {
   signIn,

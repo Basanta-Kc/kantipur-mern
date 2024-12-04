@@ -14,6 +14,7 @@ import * as yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useAuthUser } from "../App";
 
 const schema = yup
   .object({
@@ -29,6 +30,7 @@ const signIn = async (data) => {
 };
 
 export default function SignIn() {
+  const { setAuthUser } = useAuthUser();
   const navigate = useNavigate();
 
   const {
@@ -41,7 +43,8 @@ export default function SignIn() {
 
   const mutation = useMutation({
     mutationFn: signIn,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      setAuthUser(res.data);
       navigate("/");
     },
   });

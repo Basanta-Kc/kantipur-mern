@@ -23,8 +23,10 @@ const getProducts = async (req, res) => {
   const products = await Product.find()
     .skip((page - 1) * limit)
     .limit(limit);
+  const total = await Product.countDocuments();
   res.json({
     data: products,
+    total,
   });
 };
 

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Grid from "@mui/material/Grid2";
-import NavBar from "../components/NavBar";
 import ProductCard from "../components/ProductCard";
 import { Typography } from "@mui/material";
 import { ProductsSkeleton } from "../components/ProductsSkeleton";
@@ -19,7 +18,6 @@ export default function Home() {
   console.log(latestProducts);
   return (
     <>
-      <NavBar />
       <latestProducts />
       <img src="/banner.jpg" width="100%" />
       {/* <Typography variant="h4" textAlign={"center"} marginY={2}>
@@ -52,7 +50,6 @@ export default function Home() {
             </Grid>
           ))
         )}
-        {}
       </Grid>
     </>
   );
