@@ -19,8 +19,15 @@ const getProducts = async (req, res) => {
   // page =2, skiep(5) => 2-1 * 5 = 5
   // page = 3, skiep(10) 3 - 1 * 5 = 10
   // page  4 , skeip (15), 4 -1 * 5 = 15
-  const { page, limit } = req.query;
+
+  const { page, limit, order } = req.query;
+  const sort = {};
+  if (order) {
+    sort.price = order;
+  }
+
   const products = await Product.find()
+    .sort(sort)
     .skip((page - 1) * limit)
     .limit(limit);
   const total = await Product.countDocuments();
