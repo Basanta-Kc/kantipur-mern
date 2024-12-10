@@ -18,7 +18,6 @@ export default function Home() {
   console.log(latestProducts);
   return (
     <>
-      <latestProducts />
       <img src="/banner.jpg" width="100%" />
       {/* <Typography variant="h4" textAlign={"center"} marginY={2}>
         Featured Product

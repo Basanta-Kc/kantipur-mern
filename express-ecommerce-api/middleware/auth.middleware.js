@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const protect = (req, res, next) => {
   try {
-    var decoded = jwt.verify(req.headers.token, "secret");
+    const decoded = jwt.verify(req.cookies.token, "secret");
     req.authUser = { id: decoded.id };
     next();
   } catch (err) {

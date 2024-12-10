@@ -12,7 +12,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 const getProducts = async (limit, page, order) => {
-  const res = await axios.get("http://localhost:3000/api/product", {
+  const res = await axios.get("/api/product", {
     params: {
       limit,
       page,

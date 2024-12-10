@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("express-async-errors");
+const cookieParser = require("cookie-parser");
 const connectDb = require("./config/db");
 const productRoutes = require("./route/product.route");
 const authRoutes = require("./route/auth.route");
@@ -10,7 +11,7 @@ const port = 3000;
 connectDb();
 app.use(cors());
 app.use(express.static("uploads"));
-
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/product", productRoutes);

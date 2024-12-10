@@ -3,7 +3,7 @@ const Product = require("../model/Product");
 const createProduct = async (req, res) => {
   await Product.create({
     name: req.body.name,
-    image: req.file.filename,
+    image: req?.file?.filename,
     price: req.body.price,
     description: req.body.description,
     user: req.authUser.id,
@@ -67,6 +67,13 @@ const updateProduct = async (req, res) => {
   });
 };
 
+const getProduct = async (req, res) => {
+  const product = await Product.findOne({ _id: req.params.id });
+  res.json({
+    data: product,
+  });
+};
+
 module.exports = {
   createProduct,
   getProducts,
@@ -74,5 +81,6 @@ module.exports = {
   updateProduct,
   getLatestProducts,
   getFeaturedProducts,
+  getProduct,
 };
 // localhost:3000/api/products

@@ -25,7 +25,7 @@ const schema = yup
   .required();
 
 const signIn = async (data) => {
-  const res = await axios.post("http://localhost:3000/api/auth/sign-in", data);
+  const res = await axios.post("/api/auth/sign-in", data);
   return res.data;
 };
 

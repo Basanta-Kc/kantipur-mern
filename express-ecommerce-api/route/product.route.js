@@ -7,6 +7,7 @@ const {
   updateProduct,
   getLatestProducts,
   getFeaturedProducts,
+  getProduct,
 } = require("../controller/product.controller");
 const { protect } = require("../middleware/auth.middleware");
 const router = express.Router();
@@ -27,6 +28,7 @@ router.post("/", protect, upload.single("image"), createProduct);
 router.get("/", getProducts);
 router.get("/latest", getLatestProducts);
 router.get("/featured", getFeaturedProducts);
+router.get("/:id", getProduct);
 router.delete("/:id", protect, deleteProduct);
 router.patch("/:id", protect, updateProduct);
 

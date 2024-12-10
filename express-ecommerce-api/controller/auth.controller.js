@@ -44,10 +44,20 @@ const signIn = async (req, res) => {
       "secret",
       { expiresIn: "10d" }
     );
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 10);
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      expires: expiresAt,
+      secure: true,
+    });
+
     res.json({
       message: "Signedin succesfully.",
       token,
-      data: user
+      data: user,
     });
   } else {
     res.status(401).json({
@@ -55,7 +65,6 @@ const signIn = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   signIn,
