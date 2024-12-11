@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -18,13 +18,17 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import EditIcon from "@mui/icons-material/Edit";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
+import SearchIcon from "@mui/icons-material/Search";
+import useDebounce from "../../hooks/useDebounce";
 
-const getProducts = async (limit, page, order) => {
+const getProducts = async (limit, page, search) => {
   const res = await axios.get("/api/product", {
     params: {
       limit,
       page,
-      order,
+      search,
     },
   });
   return res.data;
@@ -35,8 +39,12 @@ const deleteProduct = async (id) => {
   return res.data;
 };
 
+
+
 export default function DashboardProducts() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(8);
 
@@ -49,8 +57,8 @@ export default function DashboardProducts() {
     setPage(1);
   };
   const { data, isSuccess, refetch } = useQuery({
-    queryKey: ["products", rowsPerPage, page],
-    queryFn: () => getProducts(rowsPerPage, page),
+    queryKey: ["products", rowsPerPage, page, debouncedSearch],
+    queryFn: () => getProducts(rowsPerPage, page, debouncedSearch),
   });
 
   const mutation = useMutation({
@@ -65,14 +73,39 @@ export default function DashboardProducts() {
   });
   return (
     <TableContainer component={Paper}>
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate("/dashboard/products/add");
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
         }}
       >
-        Add Product
-      </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate("/dashboard/products/add");
+          }}
+        >
+          Add Product
+        </Button>
+        <TextField
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          size="small"
+          id="input-with-icon-textfield"
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Box>
+
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -136,3 +169,9 @@ export default function DashboardProducts() {
 
 // ui.ecoomer.com (cookie = token) => api call (cookie)
 // api.ecommer.com  /sign-in (cookeset) readonly
+
+// const id = setTimeout(() => {
+//   console.log("helloo")
+// }, 5000)
+
+// clearTimeout(id)

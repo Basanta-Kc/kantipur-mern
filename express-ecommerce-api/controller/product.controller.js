@@ -20,13 +20,19 @@ const getProducts = async (req, res) => {
   // page = 3, skiep(10) 3 - 1 * 5 = 10
   // page  4 , skeip (15), 4 -1 * 5 = 15
 
-  const { page, limit, order } = req.query;
+  const { page, limit, order, search } = req.query;
   const sort = {};
   if (order) {
     sort.price = order;
   }
 
-  const products = await Product.find()
+  const filter = {};
+  if (search) {
+    // like %thisrht$
+    filter.name = new RegExp(search);
+  }
+
+  const products = await Product.find(filter)
     .sort(sort)
     .skip((page - 1) * limit)
     .limit(limit);
@@ -61,7 +67,16 @@ const deleteProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  await Product.updateOne({ _id: req.params.id }, req.body);
+  const product = {
+    name: req.body.name,
+    price: req.body.price,
+    featured: req.body.featured,
+  };
+
+  if (req?.file?.filename) {
+    product.image = req.file.filename;
+  }
+  await Product.updateOne({ _id: req.params.id }, product);
   res.json({
     message: "Product updated succesfully.",
   });

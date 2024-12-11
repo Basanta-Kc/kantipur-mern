@@ -16,6 +16,7 @@ import { useNavigate, useParams } from "react-router";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 const schema = yup
   .object({
@@ -25,13 +26,21 @@ const schema = yup
   })
   .required();
 
-const addProduct = async (data) => {
+const addOrUpdateProduct = async (data, productId) => {
   const formData = new FormData();
   formData.append("name", data.name);
   formData.append("price", data.price);
   formData.append("featured", data.featured);
-  console.log(data.image);
-  formData.append("image", data.image[0]);
+
+  if (data.image[0]) {
+    formData.append("image", data.image[0]);
+  }
+
+  if (productId) {
+    const res = await axios.patch(`/api/product/${productId}`, formData);
+    return res.data;
+  }
+
   const res = await axios.post("/api/product", formData);
   return res.data;
 };
@@ -42,6 +51,7 @@ const getProduct = async (productId) => {
 };
 
 export default function ProductForm() {
+  const [previewImg, setPreviewImg] = useState();
   const navigate = useNavigate();
   const { productId } = useParams();
 
@@ -57,7 +67,7 @@ export default function ProductForm() {
   });
 
   const mutation = useMutation({
-    mutationFn: addProduct,
+    mutationFn: (data) => addOrUpdateProduct(data, productId),
     onSuccess: (res) => {
       navigate("/dashboard/products");
       toast(res.message, {
@@ -72,11 +82,13 @@ export default function ProductForm() {
     enabled: Boolean(productId),
   });
 
-  if (productId && query.isSuccess) {
-    setValue("name", query.data.name);
-    setValue("price", query.data.price);
-    setValue("featured", query.data.featured);
-  }
+  useEffect(() => {
+    if (query.isSuccess) {
+      setValue("name", query.data.name);
+      setValue("price", query.data.price);
+      setValue("featured", query.data.featured);
+    }
+  }, [query.isSuccess]);
 
   const onSubmit = (data) => {
     mutation.mutate(data);
@@ -130,7 +142,26 @@ export default function ProductForm() {
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="image">Image</FormLabel>
-            <input type="file" id="image" {...register("image")} />
+            <input
+              type="file"
+              id="image"
+              {...register("image")}
+              onChange={(e) => {
+                const url = URL.createObjectURL(e.target.files[0]);
+                setPreviewImg(url);
+              }}
+            />
+            {(previewImg || query?.data?.image) && (
+              <Box
+                component="img"
+                src={
+                  previewImg
+                    ? previewImg
+                    : `http://localhost:3000/${query.data.image}`
+                }
+                sx={{ width: "200px", mt: 2 }}
+              />
+            )}
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="price">Price</FormLabel>

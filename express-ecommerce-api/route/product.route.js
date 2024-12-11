@@ -30,6 +30,6 @@ router.get("/latest", getLatestProducts);
 router.get("/featured", getFeaturedProducts);
 router.get("/:id", getProduct);
 router.delete("/:id", protect, deleteProduct);
-router.patch("/:id", protect, updateProduct);
+router.patch("/:id", protect,  upload.single("image"),  updateProduct);
 
 module.exports = router;
