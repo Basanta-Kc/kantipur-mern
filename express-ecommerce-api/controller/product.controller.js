@@ -1,3 +1,4 @@
+const Order = require("../model/Order");
 const Product = require("../model/Product");
 
 const createProduct = async (req, res) => {
@@ -89,6 +90,21 @@ const getProduct = async (req, res) => {
   });
 };
 
+const createOrder = async (req, res) => {
+  let total = 0;
+  // req.body.products = [{id, quantity}, {id quanity}]
+  for (let { _id, quantity } of req.body.products) {
+    const product = await Product.findById(_id);
+    total += product.price * quantity;
+  }
+
+  await Order.create({
+    user: req.authUser.id,
+    products: req.body.products,
+    total,
+  });
+};
+
 module.exports = {
   createProduct,
   getProducts,
@@ -97,5 +113,6 @@ module.exports = {
   getLatestProducts,
   getFeaturedProducts,
   getProduct,
+  createOrder
 };
 // localhost:3000/api/products

@@ -5,9 +5,11 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useCart } from "../providers/CartProvider";
 
 export default function ProductCard({ product }) {
-  const { image, name, description, price } = product;
+  const { addToCart } = useCart();
+  const { _id, image, name, description, price } = product;
   return (
     <Card>
       <CardMedia
@@ -24,7 +26,13 @@ export default function ProductCard({ product }) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Add To Cart</Button>
+        <Button
+          size="small"
+          variant="contained"
+          onClick={() => addToCart(product)}
+        >
+          Add To Cart
+        </Button>
         <Button size="small">Wish List</Button>
       </CardActions>
     </Card>

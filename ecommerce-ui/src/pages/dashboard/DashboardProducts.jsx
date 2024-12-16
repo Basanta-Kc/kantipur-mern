@@ -39,8 +39,6 @@ const deleteProduct = async (id) => {
   return res.data;
 };
 
-
-
 export default function DashboardProducts() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");

@@ -15,6 +15,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardProducts from "./pages/dashboard/DashboardProducts";
 import ProductForm from "./pages/dashboard/ProductForm";
+import Cart from "./pages/Cart";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ function App() {
               <Route element={<HomeLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/cart" element={<Cart />} />
                 <Route element={<ProtectedRoutes />}>
                   <Route path="/orders" element={<h2>order page</h2>} />
                   <Route path="/profile" element={<h2>profile page</h2>} />
@@ -41,7 +43,10 @@ function App() {
                   <Route path="users" element={<h2>Dashboard Users</h2>} />
                   <Route path="products" element={<DashboardProducts />} />
                   <Route path="products/add" element={<ProductForm />} />
-                  <Route path="products/edit/:productId" element={<ProductForm />} />
+                  <Route
+                    path="products/edit/:productId"
+                    element={<ProductForm />}
+                  />
                   <Route path="products" element={<DashboardProducts />} />
                   <Route path="orders" element={<h2>Dashboard</h2>} />
                 </Route>

@@ -8,6 +8,7 @@ const {
   getLatestProducts,
   getFeaturedProducts,
   getProduct,
+  createOrder,
 } = require("../controller/product.controller");
 const { protect } = require("../middleware/auth.middleware");
 const router = express.Router();
@@ -28,8 +29,9 @@ router.post("/", protect, upload.single("image"), createProduct);
 router.get("/", getProducts);
 router.get("/latest", getLatestProducts);
 router.get("/featured", getFeaturedProducts);
+router.post("/order", protect, createOrder);
 router.get("/:id", getProduct);
 router.delete("/:id", protect, deleteProduct);
-router.patch("/:id", protect,  upload.single("image"),  updateProduct);
+router.patch("/:id", protect, upload.single("image"), updateProduct);
 
 module.exports = router;
