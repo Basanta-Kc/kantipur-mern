@@ -11,9 +11,37 @@ import { useCart } from "../providers/CartProvider";
 import Chip from "@mui/material/Chip";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import axios from "axios";
+async function createOrder(data) {
+  const res = await axios.post("/api/product/order", data);
+  return res.data;
+}
 
 export default function Cart() {
-  const { cart, handleDecrement, handleIncrement, total } = useCart();
+  const { cart, handleDecrement, handleIncrement, total, resetCart } =
+    useCart();
+
+  const mutation = useMutation({
+    mutationFn: (data) => createOrder(data),
+    onSuccess: (res) => {
+      console.log(res);
+      //stripe url
+      // url redirect
+      // alert("order created succesfully");
+      // resetCart();
+      toast(res.message);
+      resetCart();
+      location.replace(res.paymentUrl);
+    },
+  });
+
+  const handlePayment = () => {
+    mutation.mutate({
+      products: cart.map(({ _id, quantity }) => ({ _id, quantity })),
+    });
+  };
 
   return (
     <>
@@ -61,7 +89,9 @@ export default function Cart() {
           </ListItem>
         ))}
         <Typography>Total: $ {total}</Typography>
-        <Button variant="contained">Proceed to payment</Button>
+        <Button variant="contained" onClick={handlePayment}>
+          Proceed to payment
+        </Button>
       </List>
     </>
   );

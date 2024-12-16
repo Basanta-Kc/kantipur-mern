@@ -16,6 +16,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardProducts from "./pages/dashboard/DashboardProducts";
 import ProductForm from "./pages/dashboard/ProductForm";
 import Cart from "./pages/Cart";
+import Orders from "./pages/user/Orders";
 
 const queryClient = new QueryClient();
 
@@ -31,9 +32,15 @@ function App() {
               <Route element={<HomeLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
+                <Route
+                  path="success"
+                  element={
+                    <h2>Payment successful. we will deliver in few day.</h2>
+                  }
+                />
                 <Route path="/cart" element={<Cart />} />
                 <Route element={<ProtectedRoutes />}>
-                  <Route path="/orders" element={<h2>order page</h2>} />
+                  <Route path="/orders" element={<Orders />} />
                   <Route path="/profile" element={<h2>profile page</h2>} />
                 </Route>
               </Route>
@@ -41,6 +48,7 @@ function App() {
                 <Route path="dashboard" element={<DashboardLayout />}>
                   <Route index element={<h2>Welcome to dashboard</h2>} />
                   <Route path="users" element={<h2>Dashboard Users</h2>} />
+
                   <Route path="products" element={<DashboardProducts />} />
                   <Route path="products/add" element={<ProductForm />} />
                   <Route

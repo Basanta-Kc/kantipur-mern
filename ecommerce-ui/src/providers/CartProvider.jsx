@@ -52,6 +52,8 @@ export function CartProvider({ children }) {
     setCart([...cart]);
   };
 
+  const resetCart = () => setCart([]);
+
   const total = useMemo(
     () => cart.reduce((acc, curr) => acc + curr.price * curr.quantity, 0),
     [cart]
@@ -61,10 +63,10 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cart,
-        setCart,
         addToCart,
         handleDecrement,
         handleIncrement,
+        resetCart,
         total,
       }}
     >

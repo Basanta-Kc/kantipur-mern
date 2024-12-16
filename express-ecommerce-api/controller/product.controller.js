@@ -1,5 +1,8 @@
 const Order = require("../model/Order");
 const Product = require("../model/Product");
+const stripe = require("stripe")(
+  "sk_test_51M2ALFFEon6AQRRqZGoTHmXZFVSKoxQVoFRYpjpHMNeZ7CuWF2i2MEuVXCLDRGceLSR9Fh1tjLQp5aUK76gEHyX100Oz1EleVm"
+);
 
 const createProduct = async (req, res) => {
   await Product.create({
@@ -93,14 +96,69 @@ const getProduct = async (req, res) => {
 const createOrder = async (req, res) => {
   let total = 0;
   // req.body.products = [{id, quantity}, {id quanity}]
+  // for every product user is trying to buy we need to create that
+  // prodcut in stripe as well
+  const line_items = [];
   for (let { _id, quantity } of req.body.products) {
     const product = await Product.findById(_id);
+    console.log(product);
     total += product.price * quantity;
+    // crate product for stripe
+    const price = await stripe.prices.create({
+      currency: "usd",
+      unit_amount: product.price * 100,
+      product_data: {
+        name: product.name,
+      },
+    });
+
+    line_items.push({ price: price.id, quantity });
   }
 
-  await Order.create({
+  // await Order.create({
+  //   user: req.authUser.id,
+  //   products: req.body.products,
+  //   total,
+  // });
+  const order = new Order({
     user: req.authUser.id,
     products: req.body.products,
+    total,
+  });
+
+  const { _id: orderId } = await order.save();
+
+  const session = await stripe.checkout.sessions.create({
+    success_url: "http://localhost:5173/success",
+    mode: "payment",
+    line_items,
+    metadata: {
+      orderId: orderId.toString(),
+    },
+  });
+
+  res.json({
+    message: "Order created successfully.",
+    paymentUrl: session.url,
+  });
+};
+
+const getOrders = async (req, res) => {
+  const { page, limit, status } = req.query;
+
+  const filter = {
+    user: req.authUser.id,
+  };
+  if (status) {
+    filter.status = status;
+  }
+
+  const products = await Order.find(filter)
+    .skip((page - 1) * limit)
+    .limit(limit);
+  const total = await Order.countDocuments();
+  res.json({
+    data: products,
     total,
   });
 };
@@ -112,7 +170,8 @@ module.exports = {
   updateProduct,
   getLatestProducts,
   getFeaturedProducts,
+  getOrders,
   getProduct,
-  createOrder
+  createOrder,
 };
 // localhost:3000/api/products

@@ -9,6 +9,7 @@ const {
   getFeaturedProducts,
   getProduct,
   createOrder,
+  getOrders,
 } = require("../controller/product.controller");
 const { protect } = require("../middleware/auth.middleware");
 const router = express.Router();
@@ -30,6 +31,7 @@ router.get("/", getProducts);
 router.get("/latest", getLatestProducts);
 router.get("/featured", getFeaturedProducts);
 router.post("/order", protect, createOrder);
+router.get("/orders", protect, getOrders);
 router.get("/:id", getProduct);
 router.delete("/:id", protect, deleteProduct);
 router.patch("/:id", protect, upload.single("image"), updateProduct);

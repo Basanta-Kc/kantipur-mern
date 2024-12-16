@@ -25,7 +25,7 @@ const signIn = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    res.render("sign-in", { message: "Invalid Credentials" });
+    res.json({ message: "Invalid Credentials" });
     return;
   }
 
