@@ -6,9 +6,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useCart } from "../providers/CartProvider";
+import { useCartStore } from "../store/cart-store";
 
 export default function ProductCard({ product }) {
-  const { addToCart } = useCart();
+  const addToCart = useCartStore((state) => state.addToCart);
   const { _id, image, name, description, price } = product;
   return (
     <Card>

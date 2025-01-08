@@ -20,6 +20,7 @@ export function CartProvider({ children }) {
 
   const addToCart = (product) => {
     //if item aleady exist
+    // set(state => { })
     const productExist = cart.find(({ _id }) => _id === product._id);
 
     if (productExist) {
@@ -35,7 +36,7 @@ export function CartProvider({ children }) {
       });
     }
 
-    setCart([...cart]);
+    setCart([...cart]); // set()
   };
 
   const handleDecrement = (index) => {

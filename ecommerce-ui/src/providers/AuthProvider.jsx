@@ -1,9 +1,10 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext, useEffect, use } from "react";
 
 const AuthUserContext = createContext(null);
 
 export const useAuthUser = () => {
   return useContext(AuthUserContext);
+  // return use(AuthUserContext);
 };
 
 const getUserFromLocalStorage = () => {
@@ -23,4 +24,10 @@ export function AuthProvider({ children }) {
       {children}
     </AuthUserContext.Provider>
   );
+  // React 19
+  // return (
+  //   <AuthUserContext value={{ authUser, setAuthUser }}>
+  //     {children}
+  //   </AuthUserContext>
+  // );
 }

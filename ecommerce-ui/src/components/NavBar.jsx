@@ -16,12 +16,12 @@ import { useAuthUser } from "../providers/AuthProvider";
 import { useNavigate } from "react-router";
 import Badge from "@mui/material/Badge";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { useCart } from "../providers/CartProvider";
+import { useCartStore } from "../store/cart-store";
 
 function NavBar() {
   const navigate = useNavigate();
   const { authUser, setAuthUser } = useAuthUser();
-  const { cart } = useCart();
+  const cart = useCartStore((state) => state.cart);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
